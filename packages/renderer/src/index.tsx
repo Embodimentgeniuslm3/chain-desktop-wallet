@@ -7,6 +7,9 @@ import RouteHub from './pages/route';
 import './index.less';
 import { task } from './service/tasks/BackgroundJob';
 import './language/I18n';
+import { Buffer } from 'buffer/';
+
+(globalThis as any).Buffer = Buffer;
 
 ReactDOM.render(
   <RecoilRoot>
