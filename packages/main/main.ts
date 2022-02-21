@@ -4,13 +4,17 @@ import * as path from 'path';
 
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { IpcMain } from './IpcMain';
-import {autoUpdater} from "electron-updater";
-import log from "electron-log";
-import Big from "big.js";
+import { autoUpdater } from 'electron-updater';
+import log from 'electron-log';
+import Big from 'big.js';
 
-
-
-const { getGAnalyticsCode, getUACode, actionEvent, transactionEvent, pageView } = require('./UsageAnalytics');
+import {
+  getGAnalyticsCode,
+  getUACode,
+  actionEvent,
+  transactionEvent,
+  pageView,
+} from './UsageAnalytics';
 
 (global as any).actionEvent = actionEvent;
 (global as any).transactionEvent = transactionEvent;
@@ -18,14 +22,13 @@ const { getGAnalyticsCode, getUACode, actionEvent, transactionEvent, pageView } 
 (global as any).getUACode = getUACode;
 (global as any).getGAnalyticsCode = getGAnalyticsCode;
 
-
 let win: BrowserWindow | null = null;
 let ipcmain: IpcMain | null = null;
 const isDev = process.env.NODE_ENV === 'development'; // change true, in developing mode
 
 // Updater log setup
-log.transports.file.level = "debug"
-autoUpdater.logger = log
+log.transports.file.level = 'debug';
+autoUpdater.logger = log;
 log.info('App starting...');
 
 function sendStatusToWindow(text: string) {
@@ -35,11 +38,11 @@ function sendStatusToWindow(text: string) {
 
 autoUpdater.on('checking-for-update', () => {
   sendStatusToWindow('Checking for update...');
-})
+});
 
 autoUpdater.on('error', (err) => {
   sendStatusToWindow(`Error in auto-updater. ${err}`);
-})
+});
 
 autoUpdater.on('update-available', (info) => {
   sendStatusToWindow('update_available');
@@ -50,12 +53,12 @@ autoUpdater.on('update-downloaded', (info) => {
 });
 
 autoUpdater.on('download-progress', (progressObj) => {
-  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  let log_message = 'Download speed: ' + progressObj.bytesPerSecond;
   log_message = `${log_message} - Downloaded ${Big(progressObj.percent).toFixed(2)}%`;
   log_message = `${log_message} (${progressObj.transferred}/${progressObj.total})`;
 
   sendStatusToWindow(log_message);
-})
+});
 
 function createWindow() {
   const iconPath = path.join(__dirname, '/public/icon.png').replace(/\\/g, '\\\\');
@@ -87,7 +90,6 @@ function createWindow() {
   win.setMenuBarVisibility(false);
   win.removeMenu();
 
-
   if (isDev) {
     win.loadURL('http://localhost:3000/index.html');
   } else {
@@ -97,7 +99,7 @@ function createWindow() {
   win.on('closed', () => (win = null));
 
   // Open default browser when direct to external
-  win.webContents.on('new-window', function(e, url) {
+  win.webContents.on('new-window', function (e, url) {
     e.preventDefault();
     require('electron').shell.openExternal(url);
   });
@@ -112,39 +114,36 @@ function createWindow() {
     });
   }
 
-
   // DevTools
   installExtension(REACT_DEVELOPER_TOOLS)
-    .then(name => console.log(`Added Extension:  ${name}`))
-    .catch(err => console.log('An error occurred: ', err));
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log('An error occurred: ', err));
 
   if (isDev) {
     win.webContents.openDevTools();
   }
 
-  actionEvent('App', 'Open', 'AppOpened', 0)
+  actionEvent('App', 'Open', 'AppOpened', 0);
 }
 
 app.on('window-all-closed', () => {
-  actionEvent('App', 'Close', 'AppClosed', 0)
+  actionEvent('App', 'Close', 'AppClosed', 0);
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
 app.on('activate', async () => {
-
   if (win === null) {
     createWindow();
   }
-
 });
 
-app.on('ready', async function() {
-  app.allowRendererProcessReuse = false
+app.on('ready', async function () {
+  app.allowRendererProcessReuse = false;
   createWindow();
 
-  await new Promise(resolve => setTimeout(resolve, 20_000));
+  await new Promise((resolve) => setTimeout(resolve, 20_000));
   autoUpdater.checkForUpdatesAndNotify();
 });
 
@@ -159,6 +158,4 @@ ipcMain.on('auto_updater_restart_app', () => {
 ipcMain.on('restart_app', () => {
   app.relaunch();
   app.exit(0);
-})
-
-
+});

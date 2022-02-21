@@ -1,4 +1,4 @@
-import { LedgerSigner } from '../src/service/signers/LedgerSigner';
+import { LedgerSigner } from '../renderer/src/service/signers/LedgerSigner';
 import TransportHID from '@ledgerhq/hw-transport-node-hid';
 const CosmosApp: any = require('ledger-cosmos-js').default;
 export class LedgerSignerNative extends LedgerSigner {

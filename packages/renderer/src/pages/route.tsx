@@ -65,7 +65,7 @@ const getCurrentGeoLocationCountryCode = async () => {
 };
 
 function RouteHub() {
-  const [isCountryBlocked, setIsCountryBlocked] = useState(true);
+  const [isCountryBlocked, setIsCountryBlocked] = useState(false);
   const [isBlockSloganVisible, setIsBlockSloganVisible] = useState(false);
   const didMountRef = useRef(false);
 
@@ -190,12 +190,12 @@ function RouteHub() {
       const currentCountryCode = await getCurrentGeoLocationCountryCode();
 
       // Todo: Fetch country codes dynamically
-      setTimeout(() => {
-        if (!COUNTRY_CODES_TO_BLOCK.includes(currentCountryCode)) {
-          setIsCountryBlocked(false);
-        }
-        setIsBlockSloganVisible(true);
-      }, GEO_BLOCK_TIMEOUT);
+      // setTimeout(() => {
+      //   if (!COUNTRY_CODES_TO_BLOCK.includes(currentCountryCode)) {
+      //     setIsCountryBlocked(false);
+      //   }
+      //   setIsBlockSloganVisible(true);
+      // }, GEO_BLOCK_TIMEOUT);
     };
 
     if (!didMountRef.current) {

@@ -60,7 +60,7 @@ import { walletService } from '../../service/WalletService';
 import { Session } from '../../models/Session';
 // eslint-disable-next-line
 import { SettingsDataUpdate } from '../../models/Wallet';
-import packageJson from '../../../package.json';
+import packageJson from '../../../../../package.json';
 import {
   createLedgerDevice,
   detectConditionsError,
@@ -137,13 +137,10 @@ function HomeLayout(props: HomeLayoutProps) {
   const [isLedgerEthAppConnected, setIsLedgerEthAppConnected] = useState(false);
   const [isLedgerCroAppConnectModalVisible, setIsLedgerCroAppConnectModalVisible] = useState(false);
   const [isLedgerEthAppConnectModalVisible, setIsLedgerEthAppConnectModalVisible] = useState(false);
-  const [
-    isLedgerCreateAssetSuccessModalVisible,
-    setIsLedgerCreateAssetSuccessModalVisible,
-  ] = useState(false);
-  const [isLedgerCreateAssetErrorModalVisible, setIsLedgerCreateAssetErrorModalVisible] = useState(
-    false,
-  );
+  const [isLedgerCreateAssetSuccessModalVisible, setIsLedgerCreateAssetSuccessModalVisible] =
+    useState(false);
+  const [isLedgerCreateAssetErrorModalVisible, setIsLedgerCreateAssetErrorModalVisible] =
+    useState(false);
   const [isLedgerModalButtonLoading, setIsLedgerModalButtonLoading] = useState(false);
 
   const didMountRef = useRef(false);
@@ -280,7 +277,7 @@ function HomeLayout(props: HomeLayoutProps) {
       setLedgerTendermintAddress(tendermintAddress);
       setIsLedgerCroAppConnected(true);
 
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         setTimeout(resolve, 2000);
       });
 
@@ -292,13 +289,13 @@ function HomeLayout(props: HomeLayoutProps) {
       let message = `${t('create.notification.ledger.message1')}`;
       let description = `${t('create.notification.ledger.description1')}`;
       if (walletSession.wallet.walletType === LEDGER_WALLET_TYPE) {
-        if (detectConditionsError(((e as unknown) as any).toString())) {
+        if (detectConditionsError((e as unknown as any).toString())) {
           message = `${t('create.notification.ledger.message2')}`;
           description = `${t('create.notification.ledger.message2')}`;
         }
       }
 
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         setTimeout(resolve, 2000);
       });
       setIsLedgerCroAppConnected(false);
@@ -323,7 +320,7 @@ function HomeLayout(props: HomeLayoutProps) {
       ledgerEvmAddress = await device.getEthAddress(walletSession.wallet.addressIndex, false);
       setIsLedgerEthAppConnected(true);
 
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         setTimeout(resolve, 2000);
       });
 
@@ -348,7 +345,7 @@ function HomeLayout(props: HomeLayoutProps) {
         </>
       );
       if (walletSession.wallet.walletType === LEDGER_WALLET_TYPE) {
-        if (detectConditionsError(((e as unknown) as any).toString())) {
+        if (detectConditionsError((e as unknown as any).toString())) {
           message = `${t('create.notification.ledger.message2')}`;
           description = (
             <>
@@ -367,7 +364,7 @@ function HomeLayout(props: HomeLayoutProps) {
       }
 
       setIsLedgerEthAppConnected(false);
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         setTimeout(resolve, 2000);
       });
       setIsLedgerEthAppConnectModalVisible(false);
@@ -380,7 +377,7 @@ function HomeLayout(props: HomeLayoutProps) {
         duration: 20,
       });
     }
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(resolve, 2000);
     });
     if (hwok) {
@@ -440,7 +437,7 @@ function HomeLayout(props: HomeLayoutProps) {
 
         // Update All Assets in All Wallets
         const allWallets = await walletService.retrieveAllWallets();
-        allWallets.forEach(async wallet => {
+        allWallets.forEach(async (wallet) => {
           const settingsDataUpdate: SettingsDataUpdate = {
             walletId: wallet.identifier,
             chainId: wallet.config.network.chainId,
@@ -460,7 +457,7 @@ function HomeLayout(props: HomeLayoutProps) {
 
           // Save updated active asset settings.
           const allAssets = await walletService.retrieveWalletAssets(wallet.identifier);
-          allAssets.forEach(async asset => {
+          allAssets.forEach(async (asset) => {
             const newlyUpdatedAsset: UserAsset = {
               ...asset,
               config: {
@@ -720,7 +717,7 @@ function HomeLayout(props: HomeLayoutProps) {
         mode="inline"
         defaultSelectedKeys={[menuSelectedKey]}
         selectedKeys={[navbarMenuSelectedKey]}
-        onClick={item => {
+        onClick={(item) => {
           setMenuToBeSelectedKey(item.key);
           if (!pageLock) {
             setNavbarMenuSelectedKey(item.key as NavbarMenuKey);
@@ -847,7 +844,7 @@ function HomeLayout(props: HomeLayoutProps) {
           await generalConfigService.setIsAppLockedByUser(false);
           setIsSessionLockModalVisible(false);
         }}
-        onSuccess={async password => {
+        onSuccess={async (password) => {
           await generalConfigService.setIsAppLockedByUser(false);
           notification.info({
             message: t('general.sessionLockModal.notification.message2'),
@@ -871,7 +868,8 @@ function HomeLayout(props: HomeLayoutProps) {
             await generalConfigService.incrementIncorrectUnlockAttemptsCountByOne();
 
             // Self-destruct or clear storage on `N` incorrect attempts
-            latestIncorrectAttemptCount = await generalConfigService.getIncorrectUnlockAttemptsCount();
+            latestIncorrectAttemptCount =
+              await generalConfigService.getIncorrectUnlockAttemptsCount();
 
             // Deleting local storage
             if (latestIncorrectAttemptCount >= MAX_INCORRECT_ATTEMPTS_ALLOWED) {

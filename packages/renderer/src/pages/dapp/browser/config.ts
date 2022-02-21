@@ -15,6 +15,6 @@ export const ProviderPreloadScriptPath =
   process.env.NODE_ENV === 'development'
     ? `file://${path.join(
         remote.app.getAppPath().replace(/\\/g, '/'),
-        'src/pages/dapp/browser/preload.js',
+        'packages/renderer/src/pages/dapp/browser/preload.js',
       )}`
     : `file://${path.join(remote.app.getAppPath().replace(/\\/g, '/'), '../scripts/preload.js')}`;
