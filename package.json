@@ -39,7 +39,7 @@
     "@ledgerhq/hw-transport-webusb": "5.48.0",
     "@types/bluebird": "3.5.36",
     "antd": "4.16.0",
-    "axios": "0.21.2",
+    "axios": "1.6.0",
     "bech32": "2.0.0",
     "bfj": "7.0.2",
     "big.js": "6.0.3",
